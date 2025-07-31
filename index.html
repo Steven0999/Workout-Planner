@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Workout Logger</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: black;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+    .page {
+      display: none;
+      padding: 20px;
+    }
+    .active {
+      display: block;
+    }
+    h1, h2 {
+      color: orange;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #222;
+      border-radius: 10px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+    .form-group label, .form-group select, .form-group input {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 5px;
+    }
+    .form-group select, .form-group input {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #444;
+      background: #333;
+      color: white;
+    }
+    .input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .input-row input {
+      flex-grow: 1;
+    }
+    button {
+      margin: 10px;
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background: grey;
+      color: orange;
+      cursor: pointer;
+      width: auto;
+    }
+    button:hover {
+      background: #555;
+    }
+    #history-log {
+      list-style-type: none;
+      padding: 0;
+      text-align: left;
+    }
+    #history-log li {
+      background: #333;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .header-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 10px 15px;
+      font-size: 14px;
+      background: orange;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="workout-logger" class="page active">
+    <button class="header-btn" onclick="showHistoryView()">View My History</button>
+    <div class="container">
+      <h1>Log Your Workout</h1>
+      <div class="form-group">
+        <label for="work-on-select">What do you want to work on?</label>
+        <select id="work-on-select" onchange="filterEquipment()"></select>
+      </div>
+      <div class="form-group">
+        <label for="equipment-select">Equipment</label>
+        <select id="equipment-select" onchange="filterExercises()"></select>
+      </div>
+      <div class="form-group">
+        <label for="exercise-select">Exercise</label>
+        <select id="exercise-select" onchange="displaySuggestedWeight()"></select>
+      </div>
+      
+      <div id="exercise-inputs" style="display:none;">
+        <p id="suggested-weight-text" style="color: lightgray;"></p>
+        <div class="form-group">
+          <label for="sets-input">Sets</label>
+          <input type="number" id="sets-input" value="3" min="1">
+        </div>
+        <div class="form-group">
+          <label for="reps-input">Reps</label>
+          <input type="number" id="reps-input" value="10" min="1">
+        </div>
+        <div class="form-group">
+          <label for="weight-input">Weight (kg)</label>
+          <input type="number" id="weight-input" min="0">
+        </div>
+        <button onclick="saveWorkout()">Save Workout</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="workout-history" class="page">
+    <button class="header-btn" onclick="showLoggerView()">Back to Logger</button>
+    <div class="container">
+      <h2>Workout History</h2>
+      <div class="form-group">
+        <label for="history-select">Select an Exercise</label>
+        <select id="history-select" onchange="displayExerciseHistory()"></select>
+      </div>
+      <div id="history-details" style="display:none;">
+        <h3 id="best-weight-title">Best Weight: </h3>
+        <ul id="history-log"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Data Model ---
+    const exercisesData = [
+      // Upper Body
+      { name: "Bench Press", category: "upper body", equipment: "barbell" },
+      { name: "Overhead Press", category: "upper body", equipment: "barbell" },
+      { name: "Dumbbell Press", category: "upper body", equipment: "dumbbell" },
+      { name: "Lat Pulldown", category: "upper body", equipment: "cable machine" },
+      { name: "Seated Row", category: "upper body", equipment: "cable machine" },
+      { name: "Push-ups", category: "upper body", equipment: "bodyweight" },
+      { name: "Dips", category: "upper body", equipment: "bodyweight" },
+      // Push
+      { name: "Bench Press", category: "push", equipment: "barbell" },
+      { name: "Overhead Press", category: "push", equipment: "barbell" },
+      { name: "Incline Dumbbell Press", category: "push", equipment: "dumbbell" },
+      { name: "Tricep Pushdown", category: "push", equipment: "cable machine" },
+      { name: "Chest Press Machine", category: "push", equipment: "machine" },
+      // Pull
+      { name: "Deadlift", category: "pull", equipment: "barbell" },
+      { name: "Barbell Row", category: "pull", equipment: "barbell" },
+      { name: "Pull-ups", category: "pull", equipment: "bodyweight" },
+      { name: "T-Bar Row", category: "pull", equipment: "machine" },
+      { name: "Bicep Curls", category: "pull", equipment: "dumbbell" },
+      // Lower Body / Legs
+      { name: "Squats", category: "lower body", equipment: "barbell" },
+      { name: "Squats", category: "legs", equipment: "barbell" },
+      { name: "Leg Press", category: "lower body", equipment: "machine" },
+      { name: "Leg Press", category: "legs", equipment: "machine" },
+      { name: "Lunges", category: "lower body", equipment: "dumbbell" },
+      { name: "Lunges", category: "legs", equipment: "dumbbell" },
+      { name: "Hamstring Curls", category: "lower body", equipment: "machine" },
+      { name: "Hamstring Curls", category: "legs", equipment: "machine" },
+      // Full Body
+      { name: "Deadlift", category: "full body", equipment: "barbell" },
+      { name: "Squats", category: "full body", equipment: "barbell" },
+      { name: "Kettlebell Swings", category: "full body", equipment: "dumbbell" },
+      // Specific Muscles
+      { name: "Lateral Raises", category: "specific muscles", equipment: "dumbbell" },
+      { name: "Calf Raises", category: "specific muscles", equipment: "machine" },
+      { name: "Bicep Curls", category: "specific muscles", equipment: "dumbbell" },
+      { name: "Skull Crushers", category: "specific muscles", equipment: "barbell" },
+    ];
+    
+    // --- State Variables and Initial Setup ---
+    let userWorkoutData = JSON.parse(localStorage.getItem("userWorkoutData")) || {};
+    
+    document.addEventListener("DOMContentLoaded", () => {
+      populateWorkOnDropdown();
+      showLoggerView();
+    });
+    
+    // --- UI Management ---
+    function showLoggerView() {
+      document.getElementById("workout-history").classList.remove("active");
+      document.getElementById("workout-logger").classList.add("active");
+    }
+    
+    function showHistoryView() {
+      document.getElementById("workout-logger").classList.remove("active");
+      document.getElementById("workout-history").classList.add("active");
+      populateHistoryDropdown();
+    }
+    
+    // --- Workout Logger Logic ---
+    function populateWorkOnDropdown() {
+      const workOnSelect = document.getElementById("work-on-select");
+      const categories = [...new Set(exercisesData.map(e => e.category))];
+      workOnSelect.innerHTML = `<option value="">--Select--</option>` + categories.map(cat => `<option value="${cat}">${cat.charAt(0).toUpperCase() + cat.slice(1)}</option>`).join('');
+    }
+    
+    function filterEquipment() {
+      const selectedCategory = document.getElementById("work-on-select").value;
+      const equipmentSelect = document.getElementById("equipment-select");
+      
+      equipmentSelect.innerHTML = `<option value="">--Select--</option>`;
+      
+      if (selectedCategory) {
+        const filteredEquipment = [...new Set(exercisesData.filter(e => e.category === selectedCategory).map(e => e.equipment))];
+        equipmentSelect.innerHTML += filteredEquipment.map(eq => `<option value="${eq}">${eq.charAt(0).toUpperCase() + eq.slice(1)}</option>`).join('');
+      }
+      
+      document.getElementById("exercise-select").innerHTML = `<option value="">--Select--</option>`;
+      document.getElementById("exercise-inputs").style.display = "none";
+    }
+    
+    function filterExercises() {
+      const selectedCategory = document.getElementById("work-on-select").value;
+      const selectedEquipment = document.getElementById("equipment-select").value;
+      const exerciseSelect = document.getElementById("exercise-select");
+      
+      exerciseSelect.innerHTML = `<option value="">--Select--</option>`;
+      
+      if (selectedCategory && selectedEquipment) {
+        const filteredExercises = exercisesData.filter(e => e.category === selectedCategory && e.equipment === selectedEquipment);
+        exerciseSelect.innerHTML += filteredExercises.map(ex => `<option value="${ex.name}">${ex.name}</option>`).join('');
+      }
+      
+      document.getElementById("exercise-inputs").style.display = "none";
+    }
+    
+    function displaySuggestedWeight() {
+      const selectedExercise = document.getElementById("exercise-select").value;
+      const exerciseInputs = document.getElementById("exercise-inputs");
+      const suggestedWeightText = document.getElementById("suggested-weight-text");
+      
+      if (selectedExercise) {
+        exerciseInputs.style.display = "block";
+        const history = userWorkoutData[selectedExercise];
+        
+        if (history && history.bestWeight) {
+          suggestedWeightText.textContent = `Previous best lift: ${history.bestWeight}kg`;
+        } else {
+          suggestedWeightText.textContent = "No previous records found.";
+        }
+      } else {
+        exerciseInputs.style.display = "none";
+      }
+    }
+    
+    function saveWorkout() {
+      const exerciseName = document.getElementById("exercise-select").value;
+      const sets = document.getElementById("sets-input").value;
+      const reps = document.getElementById("reps-input").value;
+      const weight = document.getElementById("weight-input").value;
+      
+      if (!exerciseName || !sets || !reps || !weight) {
+        alert("Please fill in all workout details.");
+        return;
+      }
+      
+      // Ensure data is stored correctly
+      if (!userWorkoutData[exerciseName]) {
+        userWorkoutData[exerciseName] = { bestWeight: 0, records: [] };
+      }
+      
+      const newRecord = {
+        date: new Date().toISOString().split('T')[0],
+        sets: parseInt(sets),
+        reps: parseInt(reps),
+        weight: parseFloat(weight)
+      };
+      
+      userWorkoutData[exerciseName].records.push(newRecord);
+      
+      // Update best weight
+      if (newRecord.weight > userWorkoutData[exerciseName].bestWeight) {
+        userWorkoutData[exerciseName].bestWeight = newRecord.weight;
+      }
+      
+      // Save to localStorage
+      localStorage.setItem("userWorkoutData", JSON.stringify(userWorkoutData));
+      
+      alert("Workout saved successfully!");
+      
+      // Reset form
+      document.getElementById("weight-input").value = "";
+      displaySuggestedWeight(); // Update the suggested weight immediately
+    }
+    
+    // --- History View Logic ---
+    function populateHistoryDropdown() {
+      const historySelect = document.getElementById("history-select");
+      const recordedExercises = Object.keys(userWorkoutData);
+      
+      historySelect.innerHTML = `<option value="">--Select an Exercise--</option>`;
+      historySelect.innerHTML += recordedExercises.map(ex => `<option value="${ex}">${ex}</option>`).join('');
+      
+      document.getElementById("history-details").style.display = "none";
+    }
+    
+    function displayExerciseHistory() {
+      const selectedExercise = document.getElementById("history-select").value;
+      const historyDetails = document.getElementById("history-details");
+      const bestWeightTitle = document.getElementById("best-weight-title");
+      const historyLog = document.getElementById("history-log");
+      
+      if (selectedExercise) {
+        historyDetails.style.display = "block";
+        const history = userWorkoutData[selectedExercise];
+        
+        bestWeightTitle.textContent = `Best Weight: ${history.bestWeight}kg`;
+        
+        historyLog.innerHTML = "";
+        history.records.forEach(record => {
+          const listItem = document.createElement("li");
+          listItem.textContent = `Date: ${record.date} | Sets: ${record.sets} | Reps: ${record.reps} | Weight: ${record.weight}kg`;
+          historyLog.appendChild(listItem);
+        });
+      } else {
+        historyDetails.style.display = "none";
+      }
+    }
+  </script>
+
+</body>
+</html>
