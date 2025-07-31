@@ -188,16 +188,333 @@
   </div>
 
   <script>
-    // --- Data Model ---
+    // --- Comprehensive Exercise Data ---
     const exercisesData = [
-      { name: "Bench Press", category: "upper body", equipment: "barbell" },
-      { name: "Overhead Press", category: "upper body", equipment: "barbell" },
-      { name: "Dumbbell Press", category: "upper body", equipment: "dumbbell" },
-      { name: "Lat Pulldown", category: "upper body", equipment: "cable machine" },
-      { name: "Deadlift", category: "pull", equipment: "barbell" },
-      { name: "Barbell Row", category: "pull", equipment: "barbell" },
-      { name: "Squats", category: "legs", equipment: "barbell" },
-      { name: "Leg Press", category: "legs", equipment: "machine" },
+      // Upper Body - Barbell
+      { name: "Barbell Bench Press", category: "upper body", equipment: "barbell" },
+      { name: "Barbell Overhead Press", category: "upper body", equipment: "barbell" },
+      { name: "Barbell Bent-Over Row", category: "upper body", equipment: "barbell" },
+      { name: "Barbell Bicep Curl", category: "upper body", equipment: "barbell" },
+      { name: "Barbell Skull Crusher", category: "upper body", equipment: "barbell" },
+      { name: "Barbell Upright Row", category: "upper body", equipment: "barbell" },
+      { name: "Barbell Shrugs", category: "upper body", equipment: "barbell" },
+      { name: "Barbell JM Press", category: "upper body", equipment: "barbell" },
+      { name: "Barbell Landmine Press", category: "upper body", equipment: "barbell" },
+      { name: "Barbell High Pull", category: "upper body", equipment: "barbell" },
+
+      // Upper Body - Dumbbell
+      { name: "Dumbbell Bench Press", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Incline Press", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Overhead Press (Standing)", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Overhead Press (Seated)", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Flys", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Lateral Raise", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Front Raise", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Arnold Press", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Bicep Curl", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Hammer Curl", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Tricep Extension", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Kickbacks", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Rows", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Pullover", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Shrugs", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Reverse Fly", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell W-Raise", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Zottman Curl", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Waiter's Carry", category: "upper body", equipment: "dumbbell" },
+      { name: "Dumbbell Around the World", category: "upper body", equipment: "dumbbell" },
+
+      // Upper Body - Cable Machine
+      { name: "Cable Chest Fly", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Crossover", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Lateral Raise", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Face Pull", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Pullover", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Upright Row", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Bicep Curl", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Hammer Curl", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Tricep Pushdown", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Rope Pushdown", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Seated Row", category: "upper body", equipment: "cable machine" },
+      { name: "Cable High Row", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Lat Pulldown", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Reverse Fly", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Pec Deck Fly", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Wood Chop", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Decline Press", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Seated Tricep Extension", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Standing Tricep Extension", category: "upper body", equipment: "cable machine" },
+      { name: "Cable Landmine Press", category: "upper body", equipment: "cable machine" },
+
+      // Upper Body - Machine
+      { name: "Machine Chest Press", category: "upper body", equipment: "machine" },
+      { name: "Machine Shoulder Press", category: "upper body", equipment: "machine" },
+      { name: "Machine Pec Deck", category: "upper body", equipment: "machine" },
+      { name: "Machine Lat Pulldown", category: "upper body", equipment: "machine" },
+      { name: "Machine Seated Row", category: "upper body", equipment: "machine" },
+      { name: "Machine Bicep Curl", category: "upper body", equipment: "machine" },
+      { name: "Machine Tricep Extension", category: "upper body", equipment: "machine" },
+      { name: "Assisted Pull-ups", category: "upper body", equipment: "machine" },
+      { name: "Assisted Dips", category: "upper body", equipment: "machine" },
+      { name: "Machine Reverse Fly", category: "upper body", equipment: "machine" },
+
+      // Lower Body - Barbell
+      { name: "Barbell Squat", category: "lower body", equipment: "barbell" },
+      { name: "Barbell Front Squat", category: "lower body", equipment: "barbell" },
+      { name: "Barbell Lunges", category: "lower body", equipment: "barbell" },
+      { name: "Barbell Romanian Deadlift", category: "lower body", equipment: "barbell" },
+      { name: "Barbell Good Mornings", category: "lower body", equipment: "barbell" },
+      { name: "Barbell Glute Bridge", category: "lower body", equipment: "barbell" },
+      { name: "Barbell Hip Thrust", category: "lower body", equipment: "barbell" },
+      { name: "Barbell Calf Raises", category: "lower body", equipment: "barbell" },
+      { name: "Barbell Hack Squat", category: "lower body", equipment: "barbell" },
+      { name: "Barbell Sumo Squat", category: "lower body", equipment: "barbell" },
+      
+      // Lower Body - Dumbbell
+      { name: "Dumbbell Lunges", category: "lower body", equipment: "dumbbell" },
+      { name: "Dumbbell Goblet Squat", category: "lower body", equipment: "dumbbell" },
+      { name: "Dumbbell Step-ups", category: "lower body", equipment: "dumbbell" },
+      { name: "Dumbbell Romanian Deadlift", category: "lower body", equipment: "dumbbell" },
+      { name: "Dumbbell Bulgarian Split Squat", category: "lower body", equipment: "dumbbell" },
+      { name: "Dumbbell Calf Raises", category: "lower body", equipment: "dumbbell" },
+      { name: "Dumbbell Jump Squats", category: "lower body", equipment: "dumbbell" },
+      { name: "Dumbbell Single Leg Deadlift", category: "lower body", equipment: "dumbbell" },
+      { name: "Dumbbell Reverse Lunges", category: "lower body", equipment: "dumbbell" },
+      { name: "Dumbbell Box Squats", category: "lower body", equipment: "dumbbell" },
+
+      // Lower Body - Machine
+      { name: "Machine Leg Press", category: "lower body", equipment: "machine" },
+      { name: "Machine Hack Squat", category: "lower body", equipment: "machine" },
+      { name: "Machine Leg Extension", category: "lower body", equipment: "machine" },
+      { name: "Machine Leg Curl (Seated)", category: "lower body", equipment: "machine" },
+      { name: "Machine Leg Curl (Lying)", category: "lower body", equipment: "machine" },
+      { name: "Machine Calf Raise (Seated)", category: "lower body", equipment: "machine" },
+      { name: "Machine Calf Raise (Standing)", category: "lower body", equipment: "machine" },
+      { name: "Machine Hip Abduction", category: "lower body", equipment: "machine" },
+      { name: "Machine Hip Adduction", category: "lower body", equipment: "machine" },
+      { name: "Smith Machine Squat", category: "lower body", equipment: "machine" },
+
+      // Push - Barbell
+      { name: "Barbell Bench Press", category: "push", equipment: "barbell" },
+      { name: "Barbell Incline Press", category: "push", equipment: "barbell" },
+      { name: "Barbell Decline Press", category: "push", equipment: "barbell" },
+      { name: "Barbell Floor Press", category: "push", equipment: "barbell" },
+      { name: "Barbell Overhead Press", category: "push", equipment: "barbell" },
+      { name: "Barbell Push Press", category: "push", equipment: "barbell" },
+      { name: "Barbell Close Grip Bench Press", category: "push", equipment: "barbell" },
+      { name: "Barbell Military Press", category: "push", equipment: "barbell" },
+      { name: "Barbell Landmine Press", category: "push", equipment: "barbell" },
+      { name: "Barbell Bradford Press", category: "push", equipment: "barbell" },
+
+      // Push - Dumbbell
+      { name: "Dumbbell Bench Press", category: "push", equipment: "dumbbell" },
+      { name: "Dumbbell Incline Press", category: "push", equipment: "dumbbell" },
+      { name: "Dumbbell Decline Press", category: "push", equipment: "dumbbell" },
+      { name: "Dumbbell Arnold Press", category: "push", equipment: "dumbbell" },
+      { name: "Dumbbell Overhead Press", category: "push", equipment: "dumbbell" },
+      { name: "Dumbbell Skull Crushers", category: "push", equipment: "dumbbell" },
+      { name: "Dumbbell Tricep Extension", category: "push", equipment: "dumbbell" },
+      { name: "Dumbbell Close Grip Press", category: "push", equipment: "dumbbell" },
+      { name: "Dumbbell Squeeze Press", category: "push", equipment: "dumbbell" },
+      { name: "Dumbbell Push Press", category: "push", equipment: "dumbbell" },
+
+      // Push - Cable Machine
+      { name: "Cable Chest Press", category: "push", equipment: "cable machine" },
+      { name: "Cable Incline Press", category: "push", equipment: "cable machine" },
+      { name: "Cable Tricep Pushdown", category: "push", equipment: "cable machine" },
+      { name: "Cable Overhead Tricep Extension", category: "push", equipment: "cable machine" },
+      { name: "Cable Crossover", category: "push", equipment: "cable machine" },
+      { name: "Cable One-Arm Press", category: "push", equipment: "cable machine" },
+      { name: "Cable Shoulder Press", category: "push", equipment: "cable machine" },
+      { name: "Cable Pec Deck Fly", category: "push", equipment: "cable machine" },
+      { name: "Cable Bent-Over Tricep Extension", category: "push", equipment: "cable machine" },
+      { name: "Cable Front Raise", category: "push", equipment: "cable machine" },
+
+      // Pull - Barbell
+      { name: "Barbell Deadlift", category: "pull", equipment: "barbell" },
+      { name: "Barbell Bent-Over Row", category: "pull", equipment: "barbell" },
+      { name: "Barbell T-Bar Row", category: "pull", equipment: "barbell" },
+      { name: "Barbell Bicep Curl", category: "pull", equipment: "barbell" },
+      { name: "Barbell Good Mornings", category: "pull", equipment: "barbell" },
+      { name: "Barbell Power Clean", category: "pull", equipment: "barbell" },
+      { name: "Barbell Snatch", category: "pull", equipment: "barbell" },
+      { name: "Barbell Pendlay Row", category: "pull", equipment: "barbell" },
+      { name: "Barbell Reverse Curl", category: "pull", equipment: "barbell" },
+      { name: "Barbell Rack Pull", category: "pull", equipment: "barbell" },
+
+      // Pull - Dumbbell
+      { name: "Dumbbell Rows", category: "pull", equipment: "dumbbell" },
+      { name: "Dumbbell Bicep Curl", category: "pull", equipment: "dumbbell" },
+      { name: "Dumbbell Hammer Curl", category: "pull", equipment: "dumbbell" },
+      { name: "Dumbbell Farmer's Walk", category: "pull", equipment: "dumbbell" },
+      { name: "Dumbbell Pullover", category: "pull", equipment: "dumbbell" },
+      { name: "Dumbbell Shrugs", category: "pull", equipment: "dumbbell" },
+      { name: "Dumbbell Zottman Curl", category: "pull", equipment: "dumbbell" },
+      { name: "Dumbbell Reverse Fly", category: "pull", equipment: "dumbbell" },
+      { name: "Dumbbell Upright Row", category: "pull", equipment: "dumbbell" },
+      { name: "Dumbbell Deadlift", category: "pull", equipment: "dumbbell" },
+
+      // Pull - Cable Machine
+      { name: "Cable Pullover", category: "pull", equipment: "cable machine" },
+      { name: "Cable Seated Row", category: "pull", equipment: "cable machine" },
+      { name: "Cable Lat Pulldown (Wide Grip)", category: "pull", equipment: "cable machine" },
+      { name: "Cable Lat Pulldown (Close Grip)", category: "pull", equipment: "cable machine" },
+      { name: "Cable Bicep Curl", category: "pull", equipment: "cable machine" },
+      { name: "Cable Face Pull", category: "pull", equipment: "cable machine" },
+      { name: "Cable Straight-Arm Pulldown", category: "pull", equipment: "cable machine" },
+      { name: "Cable Rope Hammer Curl", category: "pull", equipment: "cable machine" },
+      { name: "Cable High Row", category: "pull", equipment: "cable machine" },
+      { name: "Cable T-Bar Row", category: "pull", equipment: "cable machine" },
+      
+      // Hinge - Barbell
+      { name: "Barbell Deadlift", category: "hinge", equipment: "barbell" },
+      { name: "Barbell Romanian Deadlift", category: "hinge", equipment: "barbell" },
+      { name: "Barbell Good Mornings", category: "hinge", equipment: "barbell" },
+      { name: "Barbell Stiff-Legged Deadlift", category: "hinge", equipment: "barbell" },
+      { name: "Barbell Sumo Deadlift", category: "hinge", equipment: "barbell" },
+      { name: "Barbell Glute Bridge", category: "hinge", equipment: "barbell" },
+      { name: "Barbell Hip Thrust", category: "hinge", equipment: "barbell" },
+      { name: "Barbell Rack Pull", category: "hinge", equipment: "barbell" },
+      { name: "Barbell Snatch Grip Deadlift", category: "hinge", equipment: "barbell" },
+      { name: "Barbell Jefferson Deadlift", category: "hinge", equipment: "barbell" },
+      
+      // Hinge - Dumbbell
+      { name: "Dumbbell Romanian Deadlift", category: "hinge", equipment: "dumbbell" },
+      { name: "Dumbbell Single-Leg Deadlift", category: "hinge", equipment: "dumbbell" },
+      { name: "Dumbbell Glute Bridge", category: "hinge", equipment: "dumbbell" },
+      { name: "Kettlebell Swing", category: "hinge", equipment: "dumbbell" },
+      { name: "Dumbbell Stiff-Legged Deadlift", category: "hinge", equipment: "dumbbell" },
+      { name: "Dumbbell Hip Thrust", category: "hinge", equipment: "dumbbell" },
+      { name: "Dumbbell Sumo Deadlift", category: "hinge", equipment: "dumbbell" },
+      { name: "Dumbbell Good Mornings", category: "hinge", equipment: "dumbbell" },
+      { name: "Dumbbell Farmer's Walk", category: "hinge", equipment: "dumbbell" },
+      { name: "Dumbbell Power Clean", category: "hinge", equipment: "dumbbell" },
+
+      // Squat - Barbell
+      { name: "Barbell Squat", category: "squat", equipment: "barbell" },
+      { name: "Barbell Front Squat", category: "squat", equipment: "barbell" },
+      { name: "Barbell Box Squat", category: "squat", equipment: "barbell" },
+      { name: "Barbell Zercher Squat", category: "squat", equipment: "barbell" },
+      { name: "Barbell Overhead Squat", category: "squat", equipment: "barbell" },
+      { name: "Barbell Hack Squat", category: "squat", equipment: "barbell" },
+      { name: "Barbell Sumo Squat", category: "squat", equipment: "barbell" },
+      { name: "Barbell Pause Squat", category: "squat", equipment: "barbell" },
+      { name: "Barbell Belt Squat", category: "squat", equipment: "barbell" },
+      { name: "Barbell Pin Squat", category: "squat", equipment: "barbell" },
+
+      // Squat - Dumbbell
+      { name: "Dumbbell Goblet Squat", category: "squat", equipment: "dumbbell" },
+      { name: "Dumbbell Sumo Squat", category: "squat", equipment: "dumbbell" },
+      { name: "Dumbbell Box Squat", category: "squat", equipment: "dumbbell" },
+      { name: "Dumbbell Thrusters", category: "squat", equipment: "dumbbell" },
+      { name: "Dumbbell Pistol Squat", category: "squat", equipment: "dumbbell" },
+      { name: "Dumbbell Jump Squat", category: "squat", equipment: "dumbbell" },
+      { name: "Dumbbell Split Squat", category: "squat", equipment: "dumbbell" },
+      { name: "Dumbbell Lateral Squat", category: "squat", equipment: "dumbbell" },
+      { name: "Dumbbell Wall Squat", category: "squat", equipment: "dumbbell" },
+      { name: "Dumbbell Overhead Squat", category: "squat", equipment: "dumbbell" },
+
+      // Full Body - Barbell
+      { name: "Barbell Clean and Jerk", category: "full body", equipment: "barbell" },
+      { name: "Barbell Snatch", category: "full body", equipment: "barbell" },
+      { name: "Barbell Thrusters", category: "full body", equipment: "barbell" },
+      { name: "Barbell Power Clean", category: "full body", equipment: "barbell" },
+      { name: "Barbell Squat Clean", category: "full body", equipment: "barbell" },
+      { name: "Barbell Hang Clean", category: "full body", equipment: "barbell" },
+      { name: "Barbell Zercher Squat", category: "full body", equipment: "barbell" },
+      { name: "Barbell Good Mornings", category: "full body", equipment: "barbell" },
+      { name: "Barbell Renegade Row", category: "full body", equipment: "barbell" },
+      { name: "Barbell Push Press", category: "full body", equipment: "barbell" },
+
+      // Full Body - Dumbbell
+      { name: "Dumbbell Thrusters", category: "full body", equipment: "dumbbell" },
+      { name: "Dumbbell Snatch", category: "full body", equipment: "dumbbell" },
+      { name: "Dumbbell Clean and Press", category: "full body", equipment: "dumbbell" },
+      { name: "Dumbbell Devil's Press", category: "full body", equipment: "dumbbell" },
+      { name: "Dumbbell Renegade Row", category: "full body", equipment: "dumbbell" },
+      { name: "Dumbbell Man-Maker", category: "full body", equipment: "dumbbell" },
+      { name: "Dumbbell Push Press", category: "full body", equipment: "dumbbell" },
+      { name: "Dumbbell Squat and Press", category: "full body", equipment: "dumbbell" },
+      { name: "Dumbbell Power Clean", category: "full body", equipment: "dumbbell" },
+      { name: "Kettlebell Swing", category: "full body", equipment: "dumbbell" },
+      
+      // Specific Muscle - Barbell
+      { name: "Barbell Bicep Curl", category: "specific muscle", equipment: "barbell" },
+      { name: "Barbell Close-Grip Bench Press (Triceps)", category: "specific muscle", equipment: "barbell" },
+      { name: "Barbell Shrugs (Traps)", category: "specific muscle", equipment: "barbell" },
+      { name: "Barbell Calf Raises", category: "specific muscle", equipment: "barbell" },
+      { name: "Barbell Reverse Curl (Forearms)", category: "specific muscle", equipment: "barbell" },
+      { name: "Barbell Wrist Curls (Forearms)", category: "specific muscle", equipment: "barbell" },
+      { name: "Barbell Standing Calf Raise", category: "specific muscle", equipment: "barbell" },
+      { name: "Barbell Drag Curl", category: "specific muscle", equipment: "barbell" },
+      { name: "Barbell Lying Tricep Extension", category: "specific muscle", equipment: "barbell" },
+      { name: "Barbell Hack Squat", category: "specific muscle", equipment: "barbell" },
+
+      // Specific Muscle - Dumbbell
+      { name: "Dumbbell Bicep Curl", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Hammer Curl", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Concentration Curl", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Tricep Kickbacks", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Lateral Raise", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Front Raise", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Rear Delt Fly", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Calf Raises", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Shrugs", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Wrist Curl", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Chest Fly", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Pullover", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell One-Arm Tricep Extension", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell One-Arm Bicep Curl", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Overhead Tricep Extension", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell W-Raise", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Arnold Press", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Zottman Curl", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Reverse Fly", category: "specific muscle", equipment: "dumbbell" },
+      { name: "Dumbbell Farmer's Walk", category: "specific muscle", equipment: "dumbbell" },
+      
+      // Specific Muscle - Cable Machine
+      { name: "Cable Bicep Curl", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Tricep Pushdown", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Overhead Tricep Extension", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Face Pull", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Lateral Raise", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Front Raise", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Reverse Fly", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Rope Pushdown", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Hammer Curl", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Pullover", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Ab Crunch", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Wood Chop", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Oblique Twist", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Hip Abduction", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Hip Adduction", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Glute Kickback", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Upright Row", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Tricep Kickback", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Drag Curl", category: "specific muscle", equipment: "cable machine" },
+      { name: "Cable Standing Calf Raise", category: "specific muscle", equipment: "cable machine" },
+
+      // Specific Muscle - Machine
+      { name: "Machine Leg Extension", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Leg Curl", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Calf Raise (Seated)", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Calf Raise (Standing)", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Hip Abduction", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Hip Adduction", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Bicep Curl", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Tricep Extension", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Pec Deck", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Shoulder Press", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Reverse Fly", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Seated Row", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Lat Pulldown", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Ab Crunch", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Back Extension", category: "specific muscle", equipment: "machine" },
+      { name: "Machine Glute Kickback", category: "specific muscle", equipment: "machine" },
+      { name: "Smith Machine Squat", category: "specific muscle", equipment: "machine" },
+      { name: "Smith Machine Calf Raise", category: "specific muscle", equipment: "machine" },
+      { name: "Smith Machine Hip Thrust", category: "specific muscle", equipment: "machine" },
+      { name: "Smith Machine Bench Press", category: "specific muscle", equipment: "machine" },
     ];
     
     // --- State Variables and Initial Setup ---
@@ -456,12 +773,11 @@
         const history = userWorkoutData[exerciseName];
         history.records = history.records.filter(record => record.id !== recordId);
 
-        // Recalculate best weight
         const newMax = Math.max(...history.records.map(r => r.maxWeight));
         history.bestWeight = isFinite(newMax) ? newMax : 0;
         
         localStorage.setItem("userWorkoutData", JSON.stringify(userWorkoutData));
-        displayExerciseHistory(); // Refresh the view
+        displayExerciseHistory();
       }
     }
 
@@ -472,7 +788,6 @@
       if (recordToEdit) {
         showLoggerView();
         
-        // Populate the form with the old data
         document.getElementById("workout-datetime").value = recordToEdit.date;
         document.getElementById("sets-input").value = recordToEdit.sets;
         document.getElementById("reps-input").value = recordToEdit.reps;
@@ -485,401 +800,11 @@
           }
         });
         
-        // Set the hidden edit state
         editingRecordId = recordId;
 
-        // Change button text to reflect editing mode
         document.getElementById("add-exercise-btn").textContent = "Update Exercise";
-        document.getElementById("save-session-btn").textContent = "Update & Save";
+        document.getElementById("save-session-btn").textContent = "Update & Save Session";
       }
-    }
-  </script>
-
-</body>
-</html>
-    }
-    .form-group label, .form-group select, .form-group input {
-      display: block;
-      width: 100%;
-      box-sizing: border-box;
-      margin-top: 5px;
-    }
-    .form-group select, .form-group input {
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #444;
-      background: #333;
-      color: white;
-    }
-    .input-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .input-row input {
-      flex-grow: 1;
-    }
-    button {
-      margin: 10px;
-      padding: 15px 30px;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      background: grey;
-      color: orange;
-      cursor: pointer;
-      width: auto;
-    }
-    button:hover {
-      background: #555;
-    }
-    .header-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 10px 15px;
-      font-size: 14px;
-      background: orange;
-      color: black;
-    }
-    #current-workout-list {
-      background: #333;
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 20px;
-      text-align: left;
-    }
-    .workout-item {
-      border-bottom: 1px solid #444;
-      padding: 8px 0;
-    }
-    .workout-item:last-child {
-      border-bottom: none;
-    }
-    #history-chart-container {
-      margin-top: 20px;
-    }
-    .chart-container {
-      position: relative;
-      height: 400px;
-      width: 100%;
-      background: #111;
-      border-radius: 5px;
-      padding: 10px;
-    }
-  </style>
-</head>
-<body>
-
-  <div id="workout-logger" class="page active">
-    <button class="header-btn" onclick="showHistoryView()">View My History</button>
-    <div class="container">
-      <h1>Log New Workout Session</h1>
-      <div class="form-group">
-        <label for="workout-datetime">Workout Date & Time</label>
-        <input type="datetime-local" id="workout-datetime">
-      </div>
-      <div class="form-group">
-        <label for="work-on-select">What do you want to work on?</label>
-        <select id="work-on-select" onchange="filterEquipment()"></select>
-      </div>
-      <div class="form-group">
-        <label for="equipment-select">Equipment</label>
-        <select id="equipment-select" onchange="filterExercises()"></select>
-      </div>
-      <div class="form-group">
-        <label for="exercise-select">Exercise</label>
-        <select id="exercise-select"></select>
-      </div>
-      
-      <div id="exercise-inputs">
-        <p id="suggested-weight-text" style="color: lightgray;"></p>
-        <div class="form-group">
-          <label for="sets-input">Sets</label>
-          <input type="number" id="sets-input" value="3" min="1">
-        </div>
-        <div class="form-group">
-          <label for="reps-input">Reps</label>
-          <input type="number" id="reps-input" value="10" min="1">
-        </div>
-        <div class="form-group">
-          <label for="weight-input">Weight (kg)</label>
-          <input type="number" id="weight-input" min="0">
-        </div>
-        <button onclick="addExerciseToWorkout()">Add Exercise to Session</button>
-      </div>
-
-      <div id="current-workout-list-container" style="display:none;">
-        <h3 style="color:orange;">Current Workout Session</h3>
-        <div id="current-workout-list"></div>
-        <button onclick="saveSession()">Save Entire Session</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="workout-history" class="page">
-    <button class="header-btn" onclick="showLoggerView()">Back to Logger</button>
-    <div class="container">
-      <h2>Workout History</h2>
-      <div class="form-group">
-        <label for="history-select">Select an Exercise</label>
-        <select id="history-select" onchange="displayExerciseHistory()"></select>
-      </div>
-      <div id="history-details" style="display:none;">
-        <h3 id="best-weight-title">Best Weight: </h3>
-        <div id="history-chart-container" class="chart-container">
-          <canvas id="history-chart"></canvas>
-        </div>
-        <h3 style="color:orange;">All Records</h3>
-        <ul id="history-log"></ul>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // --- Data Model ---
-    const exercisesData = [
-      { name: "Bench Press", category: "upper body", equipment: "barbell" },
-      { name: "Overhead Press", category: "upper body", equipment: "barbell" },
-      { name: "Dumbbell Press", category: "upper body", equipment: "dumbbell" },
-      { name: "Lat Pulldown", category: "upper body", equipment: "cable machine" },
-      { name: "Deadlift", category: "pull", equipment: "barbell" },
-      { name: "Barbell Row", category: "pull", equipment: "barbell" },
-      { name: "Squats", category: "legs", equipment: "barbell" },
-      { name: "Leg Press", category: "legs", equipment: "machine" },
-    ];
-    
-    // --- State Variables and Initial Setup ---
-    let userWorkoutData = JSON.parse(localStorage.getItem("userWorkoutData")) || {};
-    let currentWorkoutExercises = [];
-    let myChart; // Variable to hold the Chart.js instance
-
-    document.addEventListener("DOMContentLoaded", () => {
-      populateWorkOnDropdown();
-      showLoggerView();
-      // Set default date/time to now
-      document.getElementById('workout-datetime').value = new Date().toISOString().slice(0, 16);
-    });
-
-    // --- UI Management ---
-    function showLoggerView() {
-      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-      document.getElementById("workout-logger").classList.add("active");
-    }
-    
-    function showHistoryView() {
-      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-      document.getElementById("workout-history").classList.add("active");
-      populateHistoryDropdown();
-    }
-    
-    // --- Workout Logger Logic ---
-    function populateWorkOnDropdown() {
-      const workOnSelect = document.getElementById("work-on-select");
-      const categories = [...new Set(exercisesData.map(e => e.category))];
-      workOnSelect.innerHTML = `<option value="">--Select--</option>` + categories.map(cat => `<option value="${cat}">${cat.charAt(0).toUpperCase() + cat.slice(1)}</option>`).join('');
-    }
-    
-    function filterEquipment() {
-      const selectedCategory = document.getElementById("work-on-select").value;
-      const equipmentSelect = document.getElementById("equipment-select");
-      equipmentSelect.innerHTML = `<option value="">--Select--</option>`;
-      if (selectedCategory) {
-        const filteredEquipment = [...new Set(exercisesData.filter(e => e.category === selectedCategory).map(e => e.equipment))];
-        equipmentSelect.innerHTML += filteredEquipment.map(eq => `<option value="${eq}">${eq.charAt(0).toUpperCase() + eq.slice(1)}</option>`).join('');
-      }
-      document.getElementById("exercise-select").innerHTML = `<option value="">--Select--</option>`;
-    }
-    
-    function filterExercises() {
-      const selectedCategory = document.getElementById("work-on-select").value;
-      const selectedEquipment = document.getElementById("equipment-select").value;
-      const exerciseSelect = document.getElementById("exercise-select");
-      exerciseSelect.innerHTML = `<option value="">--Select--</option>`;
-      if (selectedCategory && selectedEquipment) {
-        const filteredExercises = exercisesData.filter(e => e.category === selectedCategory && e.equipment === selectedEquipment);
-        exerciseSelect.innerHTML += filteredExercises.map(ex => `<option value="${ex.name}">${ex.name}</option>`).join('');
-      }
-    }
-    
-    function addExerciseToWorkout() {
-      const exerciseName = document.getElementById("exercise-select").value;
-      const sets = document.getElementById("sets-input").value;
-      const reps = document.getElementById("reps-input").value;
-      const weight = document.getElementById("weight-input").value;
-      
-      if (!exerciseName || !sets || !reps || !weight) {
-        alert("Please select an exercise and fill in all details.");
-        return;
-      }
-      
-      const newExercise = {
-        name: exerciseName,
-        sets: parseInt(sets),
-        reps: parseInt(reps),
-        weight: parseFloat(weight)
-      };
-      
-      currentWorkoutExercises.push(newExercise);
-      renderCurrentWorkoutList();
-      
-      // Clear form for next exercise
-      document.getElementById("exercise-select").value = "";
-      document.getElementById("weight-input").value = "";
-    }
-
-    function renderCurrentWorkoutList() {
-      const listContainer = document.getElementById("current-workout-list-container");
-      const list = document.getElementById("current-workout-list");
-      list.innerHTML = "";
-      
-      if (currentWorkoutExercises.length > 0) {
-        listContainer.style.display = "block";
-        currentWorkoutExercises.forEach(ex => {
-          const item = document.createElement("div");
-          item.className = "workout-item";
-          item.textContent = `${ex.name}: ${ex.sets} sets of ${ex.reps} reps at ${ex.weight}kg`;
-          list.appendChild(item);
-        });
-      } else {
-        listContainer.style.display = "none";
-      }
-    }
-    
-    function saveSession() {
-      const workoutDateTime = document.getElementById('workout-datetime').value;
-      if (currentWorkoutExercises.length === 0 || !workoutDateTime) {
-        alert("Please add at least one exercise and specify a date/time.");
-        return;
-      }
-
-      currentWorkoutExercises.forEach(ex => {
-        const record = {
-          date: workoutDateTime,
-          sets: ex.sets,
-          reps: ex.reps,
-          weight: ex.weight
-        };
-
-        if (!userWorkoutData[ex.name]) {
-          userWorkoutData[ex.name] = { bestWeight: 0, records: [] };
-        }
-        
-        userWorkoutData[ex.name].records.push(record);
-        if (record.weight > userWorkoutData[ex.name].bestWeight) {
-          userWorkoutData[ex.name].bestWeight = record.weight;
-        }
-      });
-      
-      localStorage.setItem("userWorkoutData", JSON.stringify(userWorkoutData));
-      alert("Workout session saved successfully!");
-      
-      // Reset for a new session
-      currentWorkoutExercises = [];
-      renderCurrentWorkoutList();
-      document.getElementById('workout-datetime').value = new Date().toISOString().slice(0, 16);
-      
-      // Clean up dropdowns
-      document.getElementById("work-on-select").value = "";
-      filterEquipment();
-      filterExercises();
-    }
-    
-    // --- History View Logic ---
-    function populateHistoryDropdown() {
-      const historySelect = document.getElementById("history-select");
-      const recordedExercises = Object.keys(userWorkoutData);
-      
-      historySelect.innerHTML = `<option value="">--Select an Exercise--</option>`;
-      historySelect.innerHTML += recordedExercises.map(ex => `<option value="${ex}">${ex}</option>`).join('');
-      
-      document.getElementById("history-details").style.display = "none";
-    }
-    
-    function displayExerciseHistory() {
-      const selectedExercise = document.getElementById("history-select").value;
-      const historyDetails = document.getElementById("history-details");
-      const bestWeightTitle = document.getElementById("best-weight-title");
-      const historyLog = document.getElementById("history-log");
-      
-      if (!selectedExercise) {
-        historyDetails.style.display = "none";
-        return;
-      }
-      
-      historyDetails.style.display = "block";
-      const history = userWorkoutData[selectedExercise];
-      
-      bestWeightTitle.textContent = `Best Weight: ${history.bestWeight}kg`;
-      
-      historyLog.innerHTML = "";
-      const sortedRecords = history.records.sort((a, b) => new Date(a.date) - new Date(b.date));
-      
-      // Data for the Chart.js graph
-      const dates = sortedRecords.map(record => new Date(record.date).toLocaleDateString());
-      const weights = sortedRecords.map(record => record.weight);
-      
-      // Destroy old chart instance if it exists
-      if (myChart) {
-        myChart.destroy();
-      }
-      
-      const ctx = document.getElementById('history-chart').getContext('2d');
-      myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: dates,
-          datasets: [{
-            label: 'Weight (kg)',
-            data: weights,
-            borderColor: 'orange',
-            backgroundColor: 'rgba(255, 165, 0, 0.2)',
-            fill: true,
-            tension: 0.1
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: {
-              title: {
-                display: true,
-                text: 'Date',
-                color: 'white'
-              },
-              ticks: {
-                color: 'white'
-              }
-            },
-            y: {
-              title: {
-                display: true,
-                text: 'Weight (kg)',
-                color: 'white'
-              },
-              ticks: {
-                color: 'white'
-              }
-            }
-          },
-          plugins: {
-            legend: {
-              labels: {
-                color: 'white'
-              }
-            }
-          }
-        }
-      });
-      
-      // Populate the list of all records
-      sortedRecords.forEach(record => {
-        const listItem = document.createElement("li");
-        const dateString = new Date(record.date).toLocaleString();
-        listItem.textContent = `Date: ${dateString} | Sets: ${record.sets} | Reps: ${record.reps} | Weight: ${record.weight}kg`;
-        historyLog.appendChild(listItem);
-      });
     }
   </script>
 
