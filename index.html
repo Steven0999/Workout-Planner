@@ -35,6 +35,469 @@
       margin-bottom: 15px;
       text-align: left;
     }
+    .form-group label, .form-group select, .form-group input, .form-group button {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 5px;
+    }
+    .form-group select, .form-group input[type="number"], .form-group input[type="datetime-local"] {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #444;
+      background: #333;
+      color: white;
+    }
+    button {
+      margin: 10px;
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background: grey;
+      color: orange;
+      cursor: pointer;
+      width: auto;
+    }
+    button:hover {
+      background: #555;
+    }
+    .header-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 10px 15px;
+      font-size: 14px;
+      background: orange;
+      color: black;
+    }
+    #current-workout-list {
+      background: #333;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 20px;
+      text-align: left;
+    }
+    .workout-item {
+      border-bottom: 1px solid #444;
+      padding: 8px 0;
+    }
+    .workout-item:last-child {
+      border-bottom: none;
+    }
+    #history-chart-container {
+      margin-top: 20px;
+    }
+    .chart-container {
+      position: relative;
+      height: 400px;
+      width: 100%;
+      background: #111;
+      border-radius: 5px;
+      padding: 10px;
+    }
+    #weight-inputs-container {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    #history-log li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #333;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .history-actions button {
+      padding: 5px 10px;
+      font-size: 14px;
+      margin-left: 5px;
+    }
+    .history-actions .edit-btn { background: #5a5; color: white; }
+    .history-actions .delete-btn { background: #a55; color: white; }
+  </style>
+</head>
+<body>
+
+  <div id="workout-logger" class="page active">
+    <button class="header-btn" onclick="showHistoryView()">View My History</button>
+    <div class="container">
+      <h1>Log New Workout Session</h1>
+      <div class="form-group">
+        <label for="workout-datetime">Workout Date & Time</label>
+        <input type="datetime-local" id="workout-datetime">
+      </div>
+      <div class="form-group">
+        <label for="work-on-select">What do you want to work on?</label>
+        <select id="work-on-select" onchange="filterEquipment()"></select>
+      </div>
+      <div class="form-group">
+        <label for="equipment-select">Equipment</label>
+        <select id="equipment-select" onchange="filterExercises()"></select>
+      </div>
+      <div class="form-group">
+        <label for="exercise-select">Exercise</label>
+        <select id="exercise-select"></select>
+      </div>
+      
+      <div id="exercise-inputs">
+        <p id="suggested-weight-text" style="color: lightgray;"></p>
+        <div class="form-group">
+          <label for="sets-input">Sets</label>
+          <input type="number" id="sets-input" value="3" min="1" onchange="renderSetWeightInputs()">
+        </div>
+        <div class="form-group">
+          <label for="reps-input">Reps</label>
+          <input type="number" id="reps-input" value="10" min="1">
+        </div>
+        
+        <label>Weight for each set (kg)</label>
+        <div id="weight-inputs-container"></div>
+        
+        <button id="add-exercise-btn" onclick="addExerciseToWorkout()">Add Exercise to Session</button>
+      </div>
+
+      <div id="current-workout-list-container" style="display:none;">
+        <h3 style="color:orange;">Current Workout Session</h3>
+        <div id="current-workout-list"></div>
+        <button id="save-session-btn" onclick="saveSession()">Save Entire Session</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="workout-history" class="page">
+    <button class="header-btn" onclick="showLoggerView()">Back to Logger</button>
+    <div class="container">
+      <h2>Workout History</h2>
+      <div class="form-group">
+        <label for="history-select">Select an Exercise</label>
+        <select id="history-select" onchange="displayExerciseHistory()"></select>
+      </div>
+      <div id="history-details" style="display:none;">
+        <h3 id="best-weight-title">Best Weight: </h3>
+        <div id="history-chart-container" class="chart-container">
+          <canvas id="history-chart"></canvas>
+        </div>
+        <h3 style="color:orange;">All Records</h3>
+        <ul id="history-log"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Data Model ---
+    const exercisesData = [
+      { name: "Bench Press", category: "upper body", equipment: "barbell" },
+      { name: "Overhead Press", category: "upper body", equipment: "barbell" },
+      { name: "Dumbbell Press", category: "upper body", equipment: "dumbbell" },
+      { name: "Lat Pulldown", category: "upper body", equipment: "cable machine" },
+      { name: "Deadlift", category: "pull", equipment: "barbell" },
+      { name: "Barbell Row", category: "pull", equipment: "barbell" },
+      { name: "Squats", category: "legs", equipment: "barbell" },
+      { name: "Leg Press", category: "legs", equipment: "machine" },
+    ];
+    
+    // --- State Variables and Initial Setup ---
+    let userWorkoutData = JSON.parse(localStorage.getItem("userWorkoutData")) || {};
+    let currentWorkoutExercises = [];
+    let myChart; // Variable to hold the Chart.js instance
+    let editingRecordId = null; // To track if we're in edit mode
+
+    document.addEventListener("DOMContentLoaded", () => {
+      populateWorkOnDropdown();
+      showLoggerView();
+      document.getElementById('workout-datetime').value = new Date().toISOString().slice(0, 16);
+      renderSetWeightInputs();
+    });
+
+    // --- UI Management ---
+    function showLoggerView() {
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+      document.getElementById("workout-logger").classList.add("active");
+    }
+    
+    function showHistoryView() {
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+      document.getElementById("workout-history").classList.add("active");
+      populateHistoryDropdown();
+    }
+    
+    // --- Workout Logger Logic ---
+    function populateWorkOnDropdown() {
+      const workOnSelect = document.getElementById("work-on-select");
+      const categories = [...new Set(exercisesData.map(e => e.category))];
+      workOnSelect.innerHTML = `<option value="">--Select--</option>` + categories.map(cat => `<option value="${cat}">${cat.charAt(0).toUpperCase() + cat.slice(1)}</option>`).join('');
+    }
+    
+    function filterEquipment() {
+      const selectedCategory = document.getElementById("work-on-select").value;
+      const equipmentSelect = document.getElementById("equipment-select");
+      equipmentSelect.innerHTML = `<option value="">--Select--</option>`;
+      if (selectedCategory) {
+        const filteredEquipment = [...new Set(exercisesData.filter(e => e.category === selectedCategory).map(e => e.equipment))];
+        equipmentSelect.innerHTML += filteredEquipment.map(eq => `<option value="${eq}">${eq.charAt(0).toUpperCase() + eq.slice(1)}</option>`).join('');
+      }
+      document.getElementById("exercise-select").innerHTML = `<option value="">--Select--</option>`;
+    }
+    
+    function filterExercises() {
+      const selectedCategory = document.getElementById("work-on-select").value;
+      const selectedEquipment = document.getElementById("equipment-select").value;
+      const exerciseSelect = document.getElementById("exercise-select");
+      exerciseSelect.innerHTML = `<option value="">--Select--</option>`;
+      if (selectedCategory && selectedEquipment) {
+        const filteredExercises = exercisesData.filter(e => e.category === selectedCategory && e.equipment === selectedEquipment);
+        exerciseSelect.innerHTML += filteredExercises.map(ex => `<option value="${ex.name}">${ex.name}</option>`).join('');
+      }
+    }
+    
+    function renderSetWeightInputs() {
+      const setsInput = document.getElementById("sets-input");
+      const numSets = parseInt(setsInput.value);
+      const container = document.getElementById("weight-inputs-container");
+      container.innerHTML = "";
+      
+      if (numSets > 0) {
+        for (let i = 1; i <= numSets; i++) {
+          const input = document.createElement("input");
+          input.type = "number";
+          input.min = "0";
+          input.placeholder = `Set ${i} (kg)`;
+          input.className = "set-weight-input";
+          container.appendChild(input);
+        }
+      }
+    }
+
+    function addExerciseToWorkout() {
+      const exerciseName = document.getElementById("exercise-select").value;
+      const sets = document.getElementById("sets-input").value;
+      const reps = document.getElementById("reps-input").value;
+      
+      const setWeightInputs = Array.from(document.querySelectorAll('.set-weight-input'));
+      const setWeights = setWeightInputs.map(input => parseFloat(input.value)).filter(w => !isNaN(w));
+
+      if (!exerciseName || !sets || !reps || setWeights.length === 0) {
+        alert("Please select an exercise and fill in all details.");
+        return;
+      }
+      
+      const maxWeight = Math.max(...setWeights);
+
+      const newExercise = {
+        id: Date.now().toString(), // Unique ID for each record
+        name: exerciseName,
+        sets: parseInt(sets),
+        reps: parseInt(reps),
+        setWeights: setWeights,
+        maxWeight: maxWeight
+      };
+      
+      currentWorkoutExercises.push(newExercise);
+      renderCurrentWorkoutList();
+      
+      // Clear form for next exercise
+      document.getElementById("exercise-select").value = "";
+      document.getElementById("sets-input").value = "3";
+      document.getElementById("reps-input").value = "10";
+      renderSetWeightInputs();
+    }
+
+    function renderCurrentWorkoutList() {
+      const listContainer = document.getElementById("current-workout-list-container");
+      const list = document.getElementById("current-workout-list");
+      list.innerHTML = "";
+      
+      if (currentWorkoutExercises.length > 0) {
+        listContainer.style.display = "block";
+        currentWorkoutExercises.forEach(ex => {
+          const item = document.createElement("div");
+          item.className = "workout-item";
+          item.textContent = `${ex.name}: ${ex.sets} sets of ${ex.reps} reps. Heaviest: ${ex.maxWeight}kg`;
+          list.appendChild(item);
+        });
+      } else {
+        listContainer.style.display = "none";
+      }
+    }
+    
+    function saveSession() {
+      const workoutDateTime = document.getElementById('workout-datetime').value;
+      if (currentWorkoutExercises.length === 0 || !workoutDateTime) {
+        alert("Please add at least one exercise and specify a date/time.");
+        return;
+      }
+      
+      currentWorkoutExercises.forEach(ex => {
+        const record = {
+          id: ex.id,
+          date: workoutDateTime,
+          sets: ex.sets,
+          reps: ex.reps,
+          setWeights: ex.setWeights,
+          maxWeight: ex.maxWeight
+        };
+
+        if (!userWorkoutData[ex.name]) {
+          userWorkoutData[ex.name] = { bestWeight: 0, records: [] };
+        }
+        
+        userWorkoutData[ex.name].records.push(record);
+        if (record.maxWeight > userWorkoutData[ex.name].bestWeight) {
+          userWorkoutData[ex.name].bestWeight = record.maxWeight;
+        }
+      });
+      
+      localStorage.setItem("userWorkoutData", JSON.stringify(userWorkoutData));
+      alert("Workout session saved successfully!");
+      
+      currentWorkoutExercises = [];
+      renderCurrentWorkoutList();
+      document.getElementById('workout-datetime').value = new Date().toISOString().slice(0, 16);
+      document.getElementById("work-on-select").value = "";
+      filterEquipment();
+      filterExercises();
+    }
+    
+    // --- History View Logic ---
+    function populateHistoryDropdown() {
+      const historySelect = document.getElementById("history-select");
+      const recordedExercises = Object.keys(userWorkoutData);
+      
+      historySelect.innerHTML = `<option value="">--Select an Exercise--</option>`;
+      historySelect.innerHTML += recordedExercises.map(ex => `<option value="${ex}">${ex}</option>`).join('');
+      
+      document.getElementById("history-details").style.display = "none";
+    }
+    
+    function displayExerciseHistory() {
+      const selectedExercise = document.getElementById("history-select").value;
+      const historyDetails = document.getElementById("history-details");
+      const bestWeightTitle = document.getElementById("best-weight-title");
+      const historyLog = document.getElementById("history-log");
+      
+      if (!selectedExercise) {
+        historyDetails.style.display = "none";
+        return;
+      }
+      
+      historyDetails.style.display = "block";
+      const history = userWorkoutData[selectedExercise];
+      
+      bestWeightTitle.textContent = `Best Weight: ${history.bestWeight}kg`;
+      
+      historyLog.innerHTML = "";
+      const sortedRecords = history.records.sort((a, b) => new Date(a.date) - new Date(b.date));
+      
+      // Data for the Chart.js graph
+      const dates = sortedRecords.map(record => new Date(record.date).toLocaleDateString());
+      const maxWeights = sortedRecords.map(record => record.maxWeight);
+      
+      if (myChart) {
+        myChart.destroy();
+      }
+      
+      const ctx = document.getElementById('history-chart').getContext('2d');
+      myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: dates,
+          datasets: [{
+            label: 'Heaviest Lift (kg)',
+            data: maxWeights,
+            borderColor: 'orange',
+            backgroundColor: 'rgba(255, 165, 0, 0.2)',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              title: { display: true, text: 'Date', color: 'white' },
+              ticks: { color: 'white' }
+            },
+            y: {
+              title: { display: true, text: 'Weight (kg)', color: 'white' },
+              ticks: { color: 'white' }
+            }
+          },
+          plugins: {
+            legend: { labels: { color: 'white' } }
+          }
+        }
+      });
+      
+      sortedRecords.forEach(record => {
+        const listItem = document.createElement("li");
+        const dateString = new Date(record.date).toLocaleString();
+        const weightsString = record.setWeights.join(', ');
+        
+        listItem.innerHTML = `
+          <span>
+            Date: ${dateString} | Sets: ${record.sets} | Reps: ${record.reps} | Weights: ${weightsString}kg
+          </span>
+          <div class="history-actions">
+            <button class="edit-btn" onclick="editRecord('${selectedExercise}', '${record.id}')">Edit</button>
+            <button class="delete-btn" onclick="deleteRecord('${selectedExercise}', '${record.id}')">Delete</button>
+          </div>
+        `;
+        historyLog.appendChild(listItem);
+      });
+    }
+
+    function deleteRecord(exerciseName, recordId) {
+      if (confirm("Are you sure you want to delete this record?")) {
+        const history = userWorkoutData[exerciseName];
+        history.records = history.records.filter(record => record.id !== recordId);
+
+        // Recalculate best weight
+        const newMax = Math.max(...history.records.map(r => r.maxWeight));
+        history.bestWeight = isFinite(newMax) ? newMax : 0;
+        
+        localStorage.setItem("userWorkoutData", JSON.stringify(userWorkoutData));
+        displayExerciseHistory(); // Refresh the view
+      }
+    }
+
+    function editRecord(exerciseName, recordId) {
+      const history = userWorkoutData[exerciseName];
+      const recordToEdit = history.records.find(record => record.id === recordId);
+      
+      if (recordToEdit) {
+        showLoggerView();
+        
+        // Populate the form with the old data
+        document.getElementById("workout-datetime").value = recordToEdit.date;
+        document.getElementById("sets-input").value = recordToEdit.sets;
+        document.getElementById("reps-input").value = recordToEdit.reps;
+        
+        renderSetWeightInputs();
+        const setWeightInputs = document.querySelectorAll('.set-weight-input');
+        recordToEdit.setWeights.forEach((weight, index) => {
+          if (setWeightInputs[index]) {
+            setWeightInputs[index].value = weight;
+          }
+        });
+        
+        // Set the hidden edit state
+        editingRecordId = recordId;
+
+        // Change button text to reflect editing mode
+        document.getElementById("add-exercise-btn").textContent = "Update Exercise";
+        document.getElementById("save-session-btn").textContent = "Update & Save";
+      }
+    }
+  </script>
+
+</body>
+</html>
+    }
     .form-group label, .form-group select, .form-group input {
       display: block;
       width: 100%;
