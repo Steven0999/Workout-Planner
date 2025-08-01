@@ -106,7 +106,7 @@
     /* Styling for the weight input fields */
     .set-weight-input {
       background: #555; /* Gray background */
-      color: orange;    /* White text */
+      color: white;    /* White text */
       border: 1px solid #444;
       border-radius: 5px;
       padding: 10px;
@@ -143,6 +143,10 @@
     <div class="container">
       <h1>Log New Workout Session</h1>
       <div id="edit-mode-message" class="edit-mode-indicator" style="display:none;">Editing an existing record.</div>
+      <div class="form-group">
+        <label for="workout-type-select">Workout Location</label>
+        <select id="workout-type-select" onchange="filterEquipmentByWorkoutType()"></select>
+      </div>
       <div class="form-group">
         <label for="workout-datetime">Workout Date & Time</label>
         <input type="datetime-local" id="workout-datetime">
@@ -278,6 +282,17 @@
       { name: "Assisted Pull-ups", category: "upper body", equipment: "machine" },
       { name: "Assisted Dips", category: "upper body", equipment: "machine" },
       { name: "Machine Reverse Fly", category: "upper body", equipment: "machine" },
+      
+      // Home Workout Exercises
+      { name: "Push-ups", category: "upper body", equipment: "body weight" },
+      { name: "Pull-ups (Home)", category: "upper body", equipment: "body weight" },
+      { name: "Dips (Home)", category: "upper body", equipment: "body weight" },
+      { name: "Inverted Rows", category: "upper body", equipment: "body weight" },
+      { name: "Resistance Band Chest Press", category: "upper body", equipment: "resistance bands" },
+      { name: "Resistance Band Rows", category: "upper body", equipment: "resistance bands" },
+      { name: "Resistance Band Bicep Curls", category: "upper body", equipment: "resistance bands" },
+      { name: "Kettlebell Swings", category: "upper body", equipment: "kettlebell" },
+      { name: "Kettlebell Overhead Press", category: "upper body", equipment: "kettlebell" },
 
       // Lower Body - Barbell
       { name: "Barbell Squat", category: "lower body", equipment: "barbell" },
@@ -315,6 +330,16 @@
       { name: "Machine Hip Adduction", category: "lower body", equipment: "machine" },
       { name: "Smith Machine Squat", category: "lower body", equipment: "machine" },
 
+      // Home Lower Body Exercises
+      { name: "Squats (Body Weight)", category: "lower body", equipment: "body weight" },
+      { name: "Lunges (Body Weight)", category: "lower body", equipment: "body weight" },
+      { name: "Glute Bridges", category: "lower body", equipment: "body weight" },
+      { name: "Calf Raises", category: "lower body", equipment: "body weight" },
+      { name: "Resistance Band Squats", category: "lower body", equipment: "resistance bands" },
+      { name: "Resistance Band Hip Thrusts", category: "lower body", equipment: "resistance bands" },
+      { name: "Kettlebell Goblet Squat", category: "lower body", equipment: "kettlebell" },
+      { name: "Kettlebell Deadlift", category: "lower body", equipment: "kettlebell" },
+
       // Push - Barbell
       { name: "Barbell Bench Press", category: "push", equipment: "barbell" },
       { name: "Barbell Incline Press", category: "push", equipment: "barbell" },
@@ -350,6 +375,13 @@
       { name: "Cable Pec Deck Fly", category: "push", equipment: "cable machine" },
       { name: "Cable Bent-Over Tricep Extension", category: "push", equipment: "cable machine" },
       { name: "Cable Front Raise", category: "push", equipment: "cable machine" },
+      
+      // Home Push Exercises
+      { name: "Push-ups", category: "push", equipment: "body weight" },
+      { name: "Incline Push-ups", category: "push", equipment: "body weight" },
+      { name: "Resistance Band Chest Press", category: "push", equipment: "resistance bands" },
+      { name: "Resistance Band Overhead Press", category: "push", equipment: "resistance bands" },
+      { name: "Kettlebell Floor Press", category: "push", equipment: "kettlebell" },
 
       // Pull - Barbell
       { name: "Barbell Deadlift", category: "pull", equipment: "barbell" },
@@ -387,6 +419,13 @@
       { name: "Cable High Row", category: "pull", equipment: "cable machine" },
       { name: "Cable T-Bar Row", category: "pull", equipment: "cable machine" },
       
+      // Home Pull Exercises
+      { name: "Pull-ups (Home)", category: "pull", equipment: "body weight" },
+      { name: "Inverted Rows", category: "pull", equipment: "body weight" },
+      { name: "Resistance Band Rows", category: "pull", equipment: "resistance bands" },
+      { name: "Resistance Band Pull-aparts", category: "pull", equipment: "resistance bands" },
+      { name: "Kettlebell Bent-Over Row", category: "pull", equipment: "kettlebell" },
+
       // Hinge - Barbell
       { name: "Barbell Deadlift", category: "hinge", equipment: "barbell" },
       { name: "Barbell Romanian Deadlift", category: "hinge", equipment: "barbell" },
@@ -403,13 +442,13 @@
       { name: "Dumbbell Romanian Deadlift", category: "hinge", equipment: "dumbbell" },
       { name: "Dumbbell Single-Leg Deadlift", category: "hinge", equipment: "dumbbell" },
       { name: "Dumbbell Glute Bridge", category: "hinge", equipment: "dumbbell" },
-      { name: "Kettlebell Swing", category: "hinge", equipment: "dumbbell" },
       { name: "Dumbbell Stiff-Legged Deadlift", category: "hinge", equipment: "dumbbell" },
       { name: "Dumbbell Hip Thrust", category: "hinge", equipment: "dumbbell" },
       { name: "Dumbbell Sumo Deadlift", category: "hinge", equipment: "dumbbell" },
       { name: "Dumbbell Good Mornings", category: "hinge", equipment: "dumbbell" },
       { name: "Dumbbell Farmer's Walk", category: "hinge", equipment: "dumbbell" },
       { name: "Dumbbell Power Clean", category: "hinge", equipment: "dumbbell" },
+      { name: "Kettlebell Swing", category: "hinge", equipment: "kettlebell" },
 
       // Squat - Barbell
       { name: "Barbell Squat", category: "squat", equipment: "barbell" },
@@ -435,6 +474,14 @@
       { name: "Dumbbell Wall Squat", category: "squat", equipment: "dumbbell" },
       { name: "Dumbbell Overhead Squat", category: "squat", equipment: "dumbbell" },
 
+      // Home Squat Exercises
+      { name: "Bodyweight Squats", category: "squat", equipment: "body weight" },
+      { name: "Bulgarian Split Squats (Body Weight)", category: "squat", equipment: "body weight" },
+      { name: "Pistol Squats (Body Weight)", category: "squat", equipment: "body weight" },
+      { name: "Resistance Band Goblet Squat", category: "squat", equipment: "resistance bands" },
+      { name: "Kettlebell Goblet Squat", category: "squat", equipment: "kettlebell" },
+      { name: "Kettlebell Front Squat", category: "squat", equipment: "kettlebell" },
+
       // Full Body - Barbell
       { name: "Barbell Clean and Jerk", category: "full body", equipment: "barbell" },
       { name: "Barbell Snatch", category: "full body", equipment: "barbell" },
@@ -457,8 +504,15 @@
       { name: "Dumbbell Push Press", category: "full body", equipment: "dumbbell" },
       { name: "Dumbbell Squat and Press", category: "full body", equipment: "dumbbell" },
       { name: "Dumbbell Power Clean", category: "full body", equipment: "dumbbell" },
-      { name: "Kettlebell Swing", category: "full body", equipment: "dumbbell" },
-      
+      { name: "Kettlebell Swing", category: "full body", equipment: "kettlebell" },
+
+      // Home Full Body Exercises
+      { name: "Burpees", category: "full body", equipment: "body weight" },
+      { name: "Jumping Jacks", category: "full body", equipment: "body weight" },
+      { name: "Mountain Climbers", category: "full body", equipment: "body weight" },
+      { name: "Kettlebell Swings", category: "full body", equipment: "kettlebell" },
+      { name: "Kettlebell Clean and Press", category: "full body", equipment: "kettlebell" },
+
       // Specific Muscle - Barbell
       { name: "Barbell Bench Press (Chest)", category: "specific muscle", equipment: "barbell", muscle: "Chest" },
       { name: "Barbell Close-Grip Bench Press (Triceps)", category: "specific muscle", equipment: "barbell", muscle: "Triceps" },
@@ -536,6 +590,24 @@
       { name: "Smith Machine Calf Raise", category: "specific muscle", equipment: "machine", muscle: "Calves" },
       { name: "Smith Machine Hip Thrust", category: "specific muscle", equipment: "machine", muscle: "Glute Max" },
       { name: "Smith Machine Bench Press", category: "specific muscle", equipment: "machine", muscle: "Chest" },
+
+      // Specific Muscle - Home
+      { name: "Bodyweight Squat (Quads)", category: "specific muscle", equipment: "body weight", muscle: "Quads" },
+      { name: "Lunges (Quads/Glutes)", category: "specific muscle", equipment: "body weight", muscle: "Quads" },
+      { name: "Push-ups (Chest)", category: "specific muscle", equipment: "body weight", muscle: "Chest" },
+      { name: "Inverted Rows (Upper Back)", category: "specific muscle", equipment: "body weight", muscle: "Upper Back" },
+      { name: "Bodyweight Calf Raises", category: "specific muscle", equipment: "body weight", muscle: "Calves" },
+      { name: "Plank (Abs)", category: "specific muscle", equipment: "body weight", muscle: "Abs" },
+      { name: "Bicycle Crunches (Abs)", category: "specific muscle", equipment: "body weight", muscle: "Abs" },
+      { name: "Glute Bridges (Glute Max)", category: "specific muscle", equipment: "body weight", muscle: "Glute Max" },
+      { name: "Resistance Band Bicep Curls", category: "specific muscle", equipment: "resistance bands", muscle: "Biceps" },
+      { name: "Resistance Band Tricep Extensions", category: "specific muscle", equipment: "resistance bands", muscle: "Triceps" },
+      { name: "Resistance Band Lateral Raises", category: "specific muscle", equipment: "resistance bands", muscle: "Mid Delts" },
+      { name: "Resistance Band Rows", category: "specific muscle", equipment: "resistance bands", muscle: "Upper Back" },
+      { name: "Kettlebell Swing", category: "specific muscle", equipment: "kettlebell", muscle: "Glute Max" },
+      { name: "Kettlebell Goblet Squat", category: "specific muscle", equipment: "kettlebell", muscle: "Quads" },
+      { name: "Kettlebell Overhead Press", category: "specific muscle", equipment: "kettlebell", muscle: "Front Delts" },
+      { name: "Kettlebell Romanian Deadlift", category: "specific muscle", equipment: "kettlebell", muscle: "Hamstrings" },
     ];
     
     // --- State Variables and Initial Setup ---
@@ -545,6 +617,7 @@
     let editingRecord = null; // To track if we're in edit mode
 
     document.addEventListener("DOMContentLoaded", () => {
+      populateWorkoutTypeDropdown();
       populateWorkOnDropdown();
       populateMuscleDropdown();
       showLoggerView();
@@ -566,6 +639,15 @@
     }
     
     // --- Workout Logger Logic ---
+    function populateWorkoutTypeDropdown() {
+      const typeSelect = document.getElementById("workout-type-select");
+      typeSelect.innerHTML = `
+        <option value="">--Select Location--</option>
+        <option value="gym">Gym</option>
+        <option value="home">Home</option>
+      `;
+    }
+
     function populateWorkOnDropdown() {
       const workOnSelect = document.getElementById("work-on-select");
       const categories = [...new Set(exercisesData.map(e => e.category))];
@@ -581,7 +663,15 @@
       muscleSelect.innerHTML = `<option value="">--Select--</option>` + muscles.map(m => `<option value="${m}">${m}</option>`).join('');
     }
     
+    function filterEquipmentByWorkoutType() {
+      const selectedType = document.getElementById("workout-type-select").value;
+      const workOnSelect = document.getElementById("work-on-select");
+      workOnSelect.value = "";
+      filterEquipment();
+    }
+    
     function filterEquipment() {
+      const selectedType = document.getElementById("workout-type-select").value;
       const selectedCategory = document.getElementById("work-on-select").value;
       const muscleSelectGroup = document.getElementById("muscle-select-group");
       const equipmentSelectGroup = document.getElementById("equipment-select-group");
@@ -592,38 +682,53 @@
       const exerciseSelect = document.getElementById("exercise-select");
       exerciseSelect.innerHTML = `<option value="">--Select--</option>`;
       
+      let filteredByWorkoutType = [];
+      if (selectedType === "home") {
+        filteredByWorkoutType = exercisesData.filter(e => ["body weight", "resistance bands", "kettlebell"].includes(e.equipment));
+      } else {
+        filteredByWorkoutType = exercisesData;
+      }
+      
       if (selectedCategory === "specific muscle") {
         muscleSelectGroup.style.display = "block";
         equipmentSelectGroup.style.display = "block";
         const selectedMuscle = document.getElementById("muscle-select").value;
         if(selectedMuscle) {
-          const filteredEquipment = [...new Set(exercisesData.filter(e => e.category === selectedCategory && e.muscle === selectedMuscle).map(e => e.equipment))];
+          const filteredEquipment = [...new Set(filteredByWorkoutType.filter(e => e.category === selectedCategory && e.muscle === selectedMuscle).map(e => e.equipment))];
           equipmentSelect.innerHTML += filteredEquipment.map(eq => `<option value="${eq}">${eq.charAt(0).toUpperCase() + eq.slice(1)}</option>`).join('');
         }
       } else {
         muscleSelectGroup.style.display = "none";
         equipmentSelectGroup.style.display = "block";
         if (selectedCategory) {
-          const filteredEquipment = [...new Set(exercisesData.filter(e => e.category === selectedCategory).map(e => e.equipment))];
+          const filteredEquipment = [...new Set(filteredByWorkoutType.filter(e => e.category === selectedCategory).map(e => e.equipment))];
           equipmentSelect.innerHTML += filteredEquipment.map(eq => `<option value="${eq}">${eq.charAt(0).toUpperCase() + eq.slice(1)}</option>`).join('');
         }
       }
     }
     
     function filterExercises() {
+      const selectedType = document.getElementById("workout-type-select").value;
       const selectedCategory = document.getElementById("work-on-select").value;
       const selectedEquipment = document.getElementById("equipment-select").value;
       const exerciseSelect = document.getElementById("exercise-select");
       exerciseSelect.innerHTML = `<option value="">--Select--</option>`;
       
+      let filteredByWorkoutType = [];
+      if (selectedType === "home") {
+        filteredByWorkoutType = exercisesData.filter(e => ["body weight", "resistance bands", "kettlebell"].includes(e.equipment));
+      } else {
+        filteredByWorkoutType = exercisesData;
+      }
+
       let filteredExercises = [];
       if (selectedCategory === "specific muscle") {
         const selectedMuscle = document.getElementById("muscle-select").value;
         if (selectedMuscle && selectedEquipment) {
-          filteredExercises = exercisesData.filter(e => e.category === selectedCategory && e.muscle === selectedMuscle && e.equipment === selectedEquipment);
+          filteredExercises = filteredByWorkoutType.filter(e => e.category === selectedCategory && e.muscle === selectedMuscle && e.equipment === selectedEquipment);
         }
       } else if (selectedCategory && selectedEquipment) {
-        filteredExercises = exercisesData.filter(e => e.category === selectedCategory && e.equipment === selectedEquipment);
+        filteredExercises = filteredByWorkoutType.filter(e => e.category === selectedCategory && e.equipment === selectedEquipment);
       }
       
       if (filteredExercises.length > 0) {
@@ -715,6 +820,7 @@
     function resetLoggerForm() {
         editingRecord = null;
         document.getElementById("edit-mode-message").style.display = "none";
+        document.getElementById("workout-type-select").value = "";
         document.getElementById("work-on-select").value = "";
         document.getElementById("muscle-select-group").style.display = "none";
         document.getElementById("muscle-select").value = "";
